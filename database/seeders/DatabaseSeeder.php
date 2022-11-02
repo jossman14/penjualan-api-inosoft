@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Mobil;
+use App\Models\Motor;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -15,6 +17,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        User::truncate();
+        Mobil::truncate();
+        Motor::truncate();
+
+
         User::create([
             'name' => 'admin',
             'email' => 'admin@admin.com',
@@ -23,6 +30,10 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        \App\Models\User::factory(10)->create();
+        User::factory(20)->create();
+        Mobil::factory(50)->create();
+        Motor::factory(50)->create();
+
+        
     }
 }
