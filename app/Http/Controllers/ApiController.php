@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers;
 
@@ -32,7 +33,7 @@ class ApiController extends Controller
             'success' => true,
             'message' => 'User created successfully',
             'data' => $new_user
-        ], Response::HTTP_OK);
+        ], Response::HTTP_CREATED);
     }
 
     public function authenticate(UserAuthenticateRequest $request)
@@ -45,7 +46,7 @@ class ApiController extends Controller
             'success' => true,
             'message' => 'Token Generated successfully',
             'data' => ['token' => $token],
-        ], Response::HTTP_CREATED);
+        ], Response::HTTP_OK);
     }
 
     public function logout()
@@ -55,7 +56,7 @@ class ApiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'User has been logged out',
-        ], Response::HTTP_CREATED);
+        ], Response::HTTP_OK);
     }
 
 
@@ -70,6 +71,17 @@ class ApiController extends Controller
     public function userProfile() {
         return response()->json(auth()->user());
     }
+
+    public function get_all_user(){
+
+
+        $data = $this->userService->get_all_user();
+        return response()->json([
+            'success' => true,
+            'message' => 'Data seluruh User',
+            'data' => $data,
+        ], Response::HTTP_OK);
+    }
     /**
      * Get the token array structure.
      *
@@ -83,6 +95,6 @@ class ApiController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
             'user' => auth()->user()
-        ]);
+        ], Response::HTTP_CREATED);
     }
 }

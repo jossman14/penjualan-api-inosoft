@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace App\Services;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -56,5 +56,10 @@ class UserService extends Service {
                 'message' => 'Sorry, user cannot be logged out'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function get_all_user(){
+        return $this->mainInterface->get_all_user();
+
     }
 }

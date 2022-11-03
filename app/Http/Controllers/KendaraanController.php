@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers;
 
@@ -17,6 +18,38 @@ class KendaraanController extends Controller
   {
       $this->kendaraanService = $kendaraanService;
   }
+    public function get_all_kendaraan(){
+
+
+        $data = $this->kendaraanService->get_all_kendaraan();
+        return response()->json([
+            'success' => true,
+            'message' => 'Data seluruh kendaraan',
+            'data' => $data,
+        ], Response::HTTP_OK);
+    }
+    public function get_all_mobil(){
+        
+
+
+        $data = $this->kendaraanService->get_all_mobil();
+        return response()->json([
+            'success' => true,
+            'message' => 'Data seluruh mobil',
+            'data' => $data,
+        ], Response::HTTP_OK);
+    }
+    public function get_all_motor(){
+        $data = Kendaraan::where("type","=","motor")->get();
+
+
+        $data = $this->kendaraanService->get_all_motor();
+        return response()->json([
+            'success' => true,
+            'message' => 'Data seluruh motor',
+            'data' => $data,
+        ], Response::HTTP_OK);
+    }
     public function stok_kendaraan(){
 
         $data = $this->kendaraanService->stok_kendaraan();
@@ -24,7 +57,7 @@ class KendaraanController extends Controller
             'success' => true,
             'message' => 'Data jumlah data dan stok kendaraan',
             'data' => $data,
-        ], Response::HTTP_CREATED);
+        ], Response::HTTP_OK);
     }
 
     public function stok_mobil(){
@@ -36,7 +69,7 @@ class KendaraanController extends Controller
             'success' => true,
             'message' => 'Data stok maksimum dan minimum mobil',
             'data' => $data,
-        ], Response::HTTP_CREATED);
+        ], Response::HTTP_OK);
     }
 
     public function stok_motor(){
@@ -48,11 +81,19 @@ class KendaraanController extends Controller
             'success' => true,
             'message' => 'Data stok maksimum dan minimum motor',
             'data' => $data,
-        ], Response::HTTP_CREATED);
+        ], Response::HTTP_OK);
     }
     public function penjualan_mobil($id){
 
         $data = $this->kendaraanService->penjualan_mobil($id);
+
+        if($data == null){
+            return response()->json([
+                'success' => false,
+                'message' => "data tidak ditemukan, mohon cek kembali id mobil anda",
+
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         return response()->json([
             'success' => true,
@@ -62,6 +103,14 @@ class KendaraanController extends Controller
     }
     public function penjualan_motor($id){
         $data = $this->kendaraanService->penjualan_motor($id);
+
+        if($data == null){
+            return response()->json([
+                'success' => false,
+                'message' => "data tidak ditemukan, mohon cek kembali id motor anda",
+
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         return response()->json([
             'success' => true,
@@ -78,37 +127,29 @@ class KendaraanController extends Controller
             'success' => true,
             'message' => 'Data jumlah penjualan kendaraan',
             'data' => $data,
-        ], Response::HTTP_CREATED);
+        ], Response::HTTP_OK);
     }
 
     public function rekap_penjualan_mobil(){
-    
-        // $data = User::all();
+
+        $data = $this->kendaraanService->rekap_penjualan_mobil();
+
 
         return response()->json([
             'success' => true,
             'message' => 'Data jumlah maksimum dan minimum penjualan mobil',
-            'data' => [
-                "penjualan_mobil_maksimum" => $penjualan_mobil_maksimum,
-                "penjualan_mobil_minimum" => $penjualan_mobil_minimum,
-
-            ],
-        ], Response::HTTP_CREATED);
+            'data' => $data,
+        ], Response::HTTP_OK);
     }
 
     public function rekap_penjualan_motor(){
-        $penjualan_motor_maksimum = Kendaraan::where("type","=","motor")->max('penjualan');
-        $penjualan_motor_minimum = Kendaraan::where("type","=","motor")->min('penjualan');
-        // $data = User::all();
+        $data = $this->kendaraanService->rekap_penjualan_motor();
+
 
         return response()->json([
             'success' => true,
             'message' => 'Data jumlah maksimum dan minimum penjualan motor',
-            'data' => [
-                "penjualan_motor_maksimum" => $penjualan_motor_maksimum,
-                "penjualan_motor_minimum" => $penjualan_motor_minimum,
-
-            ],
-        ], Response::HTTP_CREATED);
+            'data' => $data,
+        ], Response::HTTP_OK);
     }
 }

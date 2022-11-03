@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Repositories\Interfaces;
 
@@ -14,4 +15,7 @@ interface KendaraanRepositoryInterface extends Repository{
     public function rekap_penjualan_kendaraan();
     public function rekap_penjualan_mobil();
     public function rekap_penjualan_motor();
+    public function get_all_kendaraan();
+    public function get_all_mobil();
+    public function get_all_motor();
 }

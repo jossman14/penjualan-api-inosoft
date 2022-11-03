@@ -1,10 +1,13 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Repositories\Eloquent;
 
+use Illuminate\Http\Response;
 use LaravelEasyRepository\Implementations\Eloquent;
 use App\Repositories\Interfaces\KendaraanRepositoryInterface;
 use App\Models\Kendaraan;
+use MongoDB\Exception\Exception;
 
 class KendaraanRepository extends Eloquent implements KendaraanRepositoryInterface{
 
@@ -61,12 +64,14 @@ class KendaraanRepository extends Eloquent implements KendaraanRepositoryInterfa
         return $data;
     }
     public function penjualan_mobil($id){
-        $data = Kendaraan::where("type","=","mobil")->findOrFail($id);
+
+        $data = Kendaraan::where("type","=","mobil")->find($id);
 
         return $data;
+
     }
     public function penjualan_motor($id){
-        $data = Kendaraan::where("type","=","motor")->findOrFail($id);
+        $data = Kendaraan::where("type","=","motor")->find($id);
 
         return $data;
     }
@@ -84,9 +89,40 @@ class KendaraanRepository extends Eloquent implements KendaraanRepositoryInterfa
         return $data;
     }
     public function rekap_penjualan_mobil(){
-        return true;
+        $penjualan_mobil_maksimum = Kendaraan::where("type","=","mobil")->max('penjualan');
+        $penjualan_mobil_minimum = Kendaraan::where("type","=","mobil")->min('penjualan');
+        $data = [
+            "penjualan_mobil_maksimum" => $penjualan_mobil_maksimum,
+            "penjualan_mobil_minimum" => $penjualan_mobil_minimum,
+
+        ];
+
+        return $data;
     }
     public function rekap_penjualan_motor(){
-        return true;
+         $penjualan_motor_maksimum = Kendaraan::where("type","=","motor")->max('penjualan');
+        $penjualan_motor_minimum = Kendaraan::where("type","=","motor")->min('penjualan');
+        $data = [
+            "penjualan_motor_maksimum" => $penjualan_motor_maksimum,
+            "penjualan_motor_minimum" => $penjualan_motor_minimum,
+
+        ];
+
+        return $data;
+    }
+
+    public function get_all_kendaraan(){
+        $data = Kendaraan::all();
+        return $data;
+    }
+    public function get_all_mobil(){
+        $data = Kendaraan::where("type","=","mobil")->get();
+        return $data;
+
+    }
+    public function get_all_motor(){
+        $data = Kendaraan::where("type","=","motor")->get();
+        return $data;
+
     }
 }

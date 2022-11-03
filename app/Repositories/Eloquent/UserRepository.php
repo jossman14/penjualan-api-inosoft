@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Repositories\Eloquent;
 
@@ -44,12 +45,12 @@ class UserRepository extends Eloquent implements UserRepositoryInterface{
     public function logout()
     {
 
-    //    return JWTAuth::invalidate($request->token);
-    //    $forever = true;
-    // dd($removeToken = JWTAuth::invalidate(JWTAuth::getToken()));
        return JWTAuth::invalidate(JWTAuth::getToken());
 
+    }
 
-
+    public function get_all_user(){
+        $data = User::all();
+        return $data;
     }
 }
